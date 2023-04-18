@@ -14,7 +14,9 @@ slack_api_token = os.environ["SLACK_API_TOKEN"]
 slack_client = WebClient(token=slack_api_token)
 
 # Define the specific reactions you want to count
-specific_reactions = ["kyoso_b", "kyoso_g", "kyoso_r", "kyoso_y"]  # Replace with the specific reactions you want to count
+# Replace with the specific reactions you want to count
+specific_reactions = ["kyoso_b", "kyoso_g", "kyoso_r", "kyoso_y"]
+
 
 def get_channels():
     try:
@@ -25,11 +27,13 @@ def get_channels():
         print(f"Error: {e}")
         return []
 
+
 def join_channel(channel_id):
     try:
         slack_client.conversations_join(channel=channel_id)
     except SlackApiError as e:
         print(f"Error: {e}")
+
 
 def get_messages_with_specific_reactions(channel_id, specific_reactions):
     messages_with_specific_reactions = []
@@ -37,9 +41,13 @@ def get_messages_with_specific_reactions(channel_id, specific_reactions):
 
     while True:
         try:
-            response = slack_client.conversations_history(channel=channel_id, cursor=cursor)
+            response = slack_client.conversations_history(
+              channel=channel_id, cursor=cursor)
             messages = response["messages"]
-            messages_with_specific_reactions.extend([msg for msg in messages if "reactions" in msg and any(reaction["name"] in specific_reactions for reaction in msg["reactions"])])
+            messages_with_specific_reactions.extend(
+              [msg for msg in messages if "reactions" in msg and any(
+                reaction["name"] in specific_reactions for reaction in
+                msg["reactions"])])
 
             cursor = response.get("response_metadata", {}).get("next_cursor")
 
@@ -51,6 +59,7 @@ def get_messages_with_specific_reactions(channel_id, specific_reactions):
 
     return messages_with_specific_reactions
 
+
 def get_users_and_counts_for_specific_reactions(messages, specific_reactions):
     user_counts = {}
     for message in messages:
@@ -59,6 +68,7 @@ def get_users_and_counts_for_specific_reactions(messages, specific_reactions):
                 for user in reaction["users"]:
                     user_counts[user] = user_counts.get(user, 0) + 1
     return user_counts
+
 
 channels = get_channels()
 
@@ -74,8 +84,10 @@ with open(csv_filename, "w", newline='', encoding='utf-8') as csvfile:
         if not channel["is_member"]:
             join_channel(channel["id"])
 
-        messages = get_messages_with_specific_reactions(channel["id"], specific_reactions)
-        user_counts = get_users_and_counts_for_specific_reactions(messages, specific_reactions)
+        messages = get_messages_with_specific_reactions(
+          channel["id"], specific_reactions)
+        user_counts = get_users_and_counts_for_specific_reactions(
+          messages, specific_reactions)
 
         if user_counts:
             for user_id, count in user_counts.items():
