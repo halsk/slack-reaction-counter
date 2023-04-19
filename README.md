@@ -39,10 +39,10 @@ Replace `your_slack_api_token` with your actual Slack API token.
 
 ## Usage
 
-1. Run the `get_count.py` script to fetch messages with specific reactions and save the reaction counts to the `reaction_counts.csv` file:
+1. Run the `count_reactions.py` script to fetch messages with specific reactions and save the reaction counts to the `reaction_counts.csv` file:
 
    ```bash
-   python get_count.py
+   python count_reactions.py
    ```
 
 2. Run the `get_top_users_name.py` script to read the reaction counts from the `reaction_counts.csv` file, summarize the counts by user, and display the top 30 users with their user names and total counts:
@@ -53,5 +53,5 @@ Replace `your_slack_api_token` with your actual Slack API token.
 
 ## Customization
 
-- To count different specific reactions, modify the `specific_reactions` list in the `get_count.py` script.
+- To count different specific reactions, modify the `specific_reactions` list in the `count_reactions.py` script.
 - To change the number of top users displayed, modify the slice in the `for` loop in the `get_top_users_name.py` script.
