@@ -35,7 +35,7 @@ def get_user_name(user_id):
     try:
         response = slack_client.users_info(user=user_id)
         user = response["user"]
-        user_name = user.get("real_name", user["name"])
+        user_name = user.get("profile").get("display_name")
         return user_name
     except SlackApiError as e:
         print(f"Error: {e}")
