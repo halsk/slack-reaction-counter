@@ -65,8 +65,8 @@ def get_users_and_counts_for_specific_reactions(messages, specific_reactions):
     for message in messages:
         for reaction in message["reactions"]:
             if reaction["name"] in specific_reactions:
-                for user in reaction["users"]:
-                    user_counts[user] = user_counts.get(user, 0) + 1
+                user_counts[message.get('user')] = user_counts.get(
+                    message.get('user'), 0) + reaction.get('count')
     return user_counts
 
 
